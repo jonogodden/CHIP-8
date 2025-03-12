@@ -1,0 +1,10 @@
+# build folders
+
+/build/
+/out/
+
+# VS Files
+
+/.vs/
+
+/.gitignore/

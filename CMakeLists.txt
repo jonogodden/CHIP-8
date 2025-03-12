@@ -16,7 +16,7 @@ find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 set(SOURCES
     src/main.cpp
     src/chip8.cpp
-    src/display.cpp
+    src/graphics.cpp
 )
 
 # Set up header files (for Solution Explorer)
@@ -24,7 +24,7 @@ set(HEADERS
     include/chip8.hpp
     include/defs.hpp
     include/font.hpp
-    include/display.hpp
+    include/graphics.hpp
 )
 
 # Group header files under a 'Header Files' folder in Solution Explorer

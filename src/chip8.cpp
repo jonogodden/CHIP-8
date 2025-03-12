@@ -34,13 +34,9 @@ Chip8::Chip8() : I(0), PC(0x200), SP(0), delay_timer(0), sound_timer(0), opcode(
         memory[0x050 + i] = font[i];
     }
 
-   
-
-
     // Debug output
     //// std::cout << "CHIP-8 Initialized: Memory, Registers, and Timers set to 0." << std::endl;
 }
-
 
 
 // load rom into memory
@@ -86,16 +82,16 @@ void Chip8::LoadGame(const char* filename) {
 
 // Print the ROM contents for verification
 
-void Chip8::PrintRomHex(const uint8_t* memory, size_t size) {
-	std::cout << "ROM Contents (in hexadecimal):" << std::endl;
-    for (size_t i = 0x200; i < (0x200 + size); ++i) {  // Start at address 0x200
-		std::cout << std::hex << std::uppercase << std::setfill('0') << std::setw(2) << (int)(unsigned char)memory[i] << " ";
-		if ((i + 1) % 16 == 0) {  // Print 16 bytes per line
-			std::cout << std::endl;
-		}
-	}
-	std::cout << std::endl;
-}
+//void Chip8::PrintRomHex(const uint8_t* memory, size_t size) {
+//	std::cout << "ROM Contents (in hexadecimal):" << std::endl;
+//    for (size_t i = 0x200; i < (0x200 + size); ++i) {  // Start at address 0x200
+//		std::cout << std::hex << std::uppercase << std::setfill('0') << std::setw(2) << (int)(unsigned char)memory[i] << " ";
+//		if ((i + 1) % 16 == 0) {  // Print 16 bytes per line
+//			std::cout << std::endl;
+//		}
+//	}
+//	std::cout << std::endl;
+//}
 
 // Fetch Op Code
 
@@ -106,22 +102,14 @@ void Chip8::FetchOpCode() {
     // PC initialised to 0x200 in CHIP-8 constructor which is where the rom is loaded
     opcode = (memory[PC] << 8) | memory[PC + 1];
 
-    
-
-
     // Increment PC by 2 (CHIP-8 instructions are 2 bytes long)
     PC += 2;
 
     // Debug output
-    std::cout << "Fetched Opcode: 0x" << std::hex << std::uppercase << opcode << std::endl;
+   // std::cout << "Fetched Opcode: 0x" << std::hex << std::uppercase << opcode << std::endl;
   //  std::cout << "Fetched Opcode: " << std::bitset<16>(opcode) << std::endl;
 
 }
-
-
-
-
-
 
 bool Chip8::KeyPress(uint8_t key) {
     // Mapping Chip-8 keys to keyboard keys using GetKeyState
@@ -176,7 +164,6 @@ bool Chip8::KeyPress(uint8_t key) {
 }
 
 
-
 void Chip8::DecodeOp() {
 
     const uint8_t F = (opcode & 0xf000) >> 12;  // FXYN - 4 bits each
@@ -195,21 +182,27 @@ void Chip8::DecodeOp() {
     uint8_t spritePixel;
     bool* screenPixel;
 
+    const uint8_t opS = (opcode & 0xF000) >> 12;
+
+    std::cout << std::hex << opS;
+
+    std::cout << "opcode " << opcode << std::endl;
+
     switch ((opcode & 0xF000) >> 12) {
 
     case 0x0:
         switch (opcode) {
         case 0x00E0: // CLEAR SCREEN
-            std::cout << "00E0" << std::endl;
+            //std::cout << "00E0" << std::endl;
 
-            for (int i = 0; i < 64 * 32; ++i) {
-                gfx[i] = false;  // All pixels off
-            }
+           for (int i = 0; i < 64 * 32; ++i) {
+               gfx[i] = false;  // All pixels off
+           }
             
             return;
 
         case 0x00EE: // RETURN FROM SUBROUTINE
-            std::cout << "00EE" << std::endl;
+           // std::cout << "00EE" << std::endl;
 
             PC = stack.top();
             stack.pop();
@@ -217,21 +210,21 @@ void Chip8::DecodeOp() {
             return;
 
         default: // CALL MACHINE CODE ROUTINE?????
-            std::cout << "0NNN" << std::endl;
+          //  std::cout << "0NNN" << std::endl;
 
 
             return;
         }
 
     case 0x1:
-        std::cout << "1NNN" << std::endl;
+       // std::cout << "1NNN" << std::endl;
 
         PC = NNN;
 
         return;
 
     case 0x2:
-        std::cout << "2NNN" << std::endl;
+        //std::cout << "2NNN" << std::endl;
 
         
 
@@ -243,35 +236,35 @@ void Chip8::DecodeOp() {
         return;
 
     case 0x3:
-        std::cout << "3XNN" << std::endl;
+        //std::cout << "3XNN" << std::endl;
 
         if (V.at(X) == NN) PC += 2;
 
         return;
 
     case 0x4:
-        std::cout << "4XNN" << std::endl;
+        //std::cout << "4XNN" << std::endl;
 
         if (V.at(X) != NN) PC += 2;
 
         return;
 
     case 0x5:
-        std::cout << "5XY0" << std::endl;
+      //  std::cout << "5XY0" << std::endl;
 
         if (V.at(X) == V.at(Y)) PC += 2;
 
         return;
 
     case 0x6:
-        std::cout << "6XNN" << std::endl;
+        //std::cout << "6XNN" << std::endl;
 
         V.at(X) = NN;
 
         return;
 
     case 0x7:
-        std::cout << "7XNN" << std::endl;
+      //  std::cout << "7XNN" << std::endl;
 
         V.at(X) += NN;
 
@@ -280,35 +273,35 @@ void Chip8::DecodeOp() {
     case 0x8:
         switch (opcode & 0x000F) {
         case 0x0:
-            std::cout << "8XY0" << std::endl;
+           // std::cout << "8XY0" << std::endl;
 
             V.at(X) = V.at(Y);
 
             return;
 
         case 0x1:
-            std::cout << "8XY1" << std::endl;
+           // std::cout << "8XY1" << std::endl;
 
             V.at(X) = V.at(X) | V.at(Y);
 
             return;
 
         case 0x2:
-            std::cout << "8XY2" << std::endl;
+           // std::cout << "8XY2" << std::endl;
 
             V.at(X) = V.at(X) & V.at(Y);
 
             return;
 
         case 0x3:
-            std::cout << "8XY3" << std::endl;
+          //  std::cout << "8XY3" << std::endl;
 
             V.at(X) = V.at(X) ^ V.at(Y);
 
             return;
 
         case 0x4:
-            std::cout << "8XY4" << std::endl;
+            //std::cout << "8XY4" << std::endl;
 
             sum = static_cast<unsigned>(V.at(X)) + static_cast<unsigned>(V.at(Y));
             if (sum > 0xff) {
@@ -322,7 +315,7 @@ void Chip8::DecodeOp() {
             return;
 
         case 0x5:
-            std::cout << "8XY5" << std::endl;
+          //  std::cout << "8XY5" << std::endl;
 
             if (V.at(X) > V.at(Y)) {
                 V.at(0xf) = 1;
@@ -335,7 +328,7 @@ void Chip8::DecodeOp() {
             return;
 
         case 0x6:
-            std::cout << "8XY6" << std::endl;
+          //  std::cout << "8XY6" << std::endl;
 
             V.at(0xf) = (V.at(X) & 0x1);
 
@@ -344,7 +337,7 @@ void Chip8::DecodeOp() {
             return;
 
         case 0x7:
-            std::cout << "8XY7" << std::endl;
+           // std::cout << "8XY7" << std::endl;
 
             if (V.at(Y) > V.at(X)) {
                 V.at(0xf) = 1;
@@ -358,7 +351,7 @@ void Chip8::DecodeOp() {
             return;
 
         case 0xE:
-            std::cout << "8XYE" << std::endl;
+           // std::cout << "8XYE" << std::endl;
 
             V.at(0xf) = (V.at(X) & 0x80) >> 7;
 
@@ -371,7 +364,7 @@ void Chip8::DecodeOp() {
         }
 
     case 0x9:
-        std::cout << "9XY0" << std::endl;
+        //std::cout << "9XY0" << std::endl;
 
         if (V.at(X) != V.at(Y)) {
             PC += 2;
@@ -380,21 +373,21 @@ void Chip8::DecodeOp() {
         return;
 
     case 0xA:
-        std::cout << "ANNN" << std::endl;
+        //std::cout << "ANNN" << std::endl;
 
         I = NNN;
 
         return;
 
     case 0xB:
-        std::cout << "BNNN" << std::endl;
+       // std::cout << "BNNN" << std::endl;
 
         PC = V.at(0) + NNN;
 
         return;
 
     case 0xC:
-        std::cout << "CXNN" << std::endl;
+       // std::cout << "CXNN" << std::endl;
 
         randNum = static_cast<uint8_t>(std::rand());
         V.at(X) = randNum & NN;
@@ -402,7 +395,7 @@ void Chip8::DecodeOp() {
         return;
 
     case 0xD:
-        std::cout << "DXYN" << std::endl;
+      //  std::cout << "DXYN" << std::endl;
 
         xPos = V.at(X) % 64;
         yPos = V.at(Y) % 32;
@@ -444,7 +437,7 @@ void Chip8::DecodeOp() {
     case 0xE:
         switch (opcode & 0x00FF) {
         case 0x9E:
-            std::cout << "EX9E" << std::endl;
+         //   std::cout << "EX9E" << std::endl;
 
             if (KeyPress(V.at(X))) {
                 PC += 2;
@@ -453,7 +446,7 @@ void Chip8::DecodeOp() {
             return;
 
         case 0xA1:
-            std::cout << "EXA1" << std::endl;
+           // std::cout << "EXA1" << std::endl;
 
 
             if (!KeyPress(V.at(X))) {
@@ -469,54 +462,54 @@ void Chip8::DecodeOp() {
     case 0xF:
         switch (opcode & 0x00FF) {
         case 0x07:
-            std::cout << "FX07" << std::endl;
+           // std::cout << "FX07" << std::endl;
 
             V.at(X) = delay_timer;
 
             return;
 
         case 0x0A:
-            std::cout << "FX0A" << std::endl;
+           // std::cout << "FX0A" << std::endl;
             return;
 
         case 0x15:
-            std::cout << "FX15" << std::endl;
+           // std::cout << "FX15" << std::endl;
 
             //delay_timer = V.at(X);
 
             return;
 
         case 0x18:
-            std::cout << "FX18" << std::endl;
+           // std::cout << "FX18" << std::endl;
 
             sound_timer = V.at(X);
 
             return;
 
         case 0x1E:
-            std::cout << "FX1E" << std::endl;
+           // std::cout << "FX1E" << std::endl;
 
             //I =+ V.at(X);
 
             return;
 
         case 0x29:
-            std::cout << "FX29" << std::endl;
+           //std::cout << "FX29" << std::endl;
 
             I = 0x050 + (V.at(X) * 5);
 
             return;
 
         case 0x33:
-            std::cout << "FX33" << std::endl;
+           // std::cout << "FX33" << std::endl;
             return;
 
         case 0x55:
-            std::cout << "FX55" << std::endl;
+           // std::cout << "FX55" << std::endl;
             return;
 
         case 0x65:
-            std::cout << "FX65" << std::endl;
+          //  std::cout << "FX65" << std::endl;
             return;
 
         default:
