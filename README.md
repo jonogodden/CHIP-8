@@ -54,7 +54,7 @@ Building a CHIP-8 emulator requires an understanding of:
 ### **Requirements:**
 
 - C++ compiler (GCC, Clang, MSVC, etc.)
-- SDL2 (if using for graphics and input handling)
+- SFML (if using for graphics and input handling)
 
 ### **Build Instructions:**
 
@@ -62,7 +62,7 @@ Building a CHIP-8 emulator requires an understanding of:
 mkdir build && cd build
 cmake ..
 make
-./chip8_emulator path/to/rom.ch8
+./chip8emulator path/to/rom.ch8
 ```
 
 ## Example ROMs
