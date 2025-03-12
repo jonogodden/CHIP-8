@@ -42,7 +42,7 @@ int main() {
         // Refresh display with the Chip-8 graphics buffer
         graphics.draw(chip8.getGraphics());
 
-        std::this_thread::sleep_for(std::chrono::nanoseconds(400));  // Slow it down
+        std::this_thread::sleep_for(std::chrono::nanoseconds(500));  // Slow it down
     }
 
     return 0;
