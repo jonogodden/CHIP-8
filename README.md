@@ -4,6 +4,8 @@
 
 This is a CHIP-8 emulator written in C++. It emulates the CHIP-8 virtual machine, allowing you to run classic CHIP-8 programs and games.
 
+![CHIP-8 Emulator in Action](chip8pong.gif)
+
 ## What is CHIP-8?
 
 CHIP-8 is a simple interpreted programming language developed in the 1970s, primarily used for running small games on early microcomputers and later on embedded systems. Despite its age, CHIP-8 remains a popular project for learning about emulation and low-level programming.
